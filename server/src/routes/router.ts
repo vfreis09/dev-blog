@@ -1,11 +1,10 @@
 import { Router } from "express";
-import home from "../controllers/controller";
+import controller from "../controllers/controller";
 
 const router = Router();
 
-const googleOauthRedirectUrl =
-  "http://localhost:3000/api/sessions/oauth/google";
+router.get("/", controller.home);
 
-router.get("/", home);
+router.get("/api/sessions/oauth/google", controller.googleOauthHandler);
 
 export default router;
