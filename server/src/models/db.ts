@@ -2,10 +2,12 @@ const pool = require("../config/dbConfig");
 
 const initDb = async () => {
   const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
-      name VARCHAR(100),
-      email VARCHAR(100) UNIQUE)`;
+    CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    google_id VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    picture VARCHAR(255);`;
 
   try {
     await pool.query(createTableQuery);
