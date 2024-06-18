@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import middlewares from "../middlewares/middleware";
-import { pool } from "../config/dbConfig";
+
+const pool = require("../config/dbConfig");
 
 const home = (req: Request, res: Response) => {
   res.send("hello world!");

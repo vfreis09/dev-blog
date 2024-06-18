@@ -15,8 +15,6 @@ const initDb = async () => {
     console.log("Users table created successfully or already exists.");
   } catch (err) {
     console.error("Error creating users table:", err);
-  } finally {
-    await pool.end();
   }
 };
 
