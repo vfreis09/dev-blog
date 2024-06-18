@@ -1,11 +1,19 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import session from "express-session";
 import middlewares from "../middlewares/middleware";
-
 const pool = require("../config/dbConfig");
 
-const home = (req: Request, res: Response) => {
-  res.send("hello world!");
+const home = async (req: Request, res: Response) => {
+  if (req.session.user) {
+    const { id } = req.session.user;
+    const { rows } = await pool.query(
+      "SELECT * FROM users WHERE google_id = $1",
+      [id]
+    );
+    res.json(rows[0]);
+  } else {
+    res.redirect("http://localhost:5173/");
+  }
 };
 
 const googleOauthHandler = async (req: Request, res: Response) => {
@@ -40,9 +48,11 @@ const googleOauthHandler = async (req: Request, res: Response) => {
       }
     }
 
-    //create a session with jwt
+    if (googleUser) {
+      req.session.user = googleUser;
+    }
 
-    res.redirect("/");
+    res.redirect("http://localhost:5173/");
   } catch (error) {
     console.error("Error in googleOauthHandler:", error);
     res.status(500).json({ error: "Internal Server Error" });
