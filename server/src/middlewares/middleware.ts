@@ -3,11 +3,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 interface GoogleTokensResult {
-  access_token: string | undefined;
+  access_token: string;
   expires_in: number;
   refresh_token: string;
   scope: string;
-  id_token: string | undefined;
+  id_token: string;
 }
 
 interface GoogleUserResult {

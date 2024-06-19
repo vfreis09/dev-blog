@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import session from "express-session";
 import middlewares from "../middlewares/middleware";
 const pool = require("../config/dbConfig");
 
@@ -11,9 +10,9 @@ const home = async (req: Request, res: Response) => {
       [id]
     );
     res.json(rows[0]);
-  } else {
-    res.redirect("http://localhost:5173/");
   }
+
+  console.log("couldnt find the user");
 };
 
 const googleOauthHandler = async (req: Request, res: Response) => {
@@ -46,9 +45,7 @@ const googleOauthHandler = async (req: Request, res: Response) => {
           [id, email, name, picture]
         );
       }
-    }
 
-    if (googleUser) {
       req.session.user = googleUser;
     }
 
