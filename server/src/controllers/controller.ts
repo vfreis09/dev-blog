@@ -15,10 +15,12 @@ const getUser = async (req: Request, res: Response) => {
     );
     if (rows.length > 0) {
       res.json({ isLoggedIn: true, user: rows[0] });
+    } else {
+      res.json({ isLoggedIn: false });
     }
+  } else {
     res.json({ isLoggedIn: false });
   }
-  res.json({ isLoggedIn: false });
 };
 
 const googleOauthHandler = async (req: Request, res: Response) => {

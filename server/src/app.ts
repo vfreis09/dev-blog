@@ -1,5 +1,6 @@
 import express from "express";
 import session from "express-session";
+import cors from "cors";
 import initDb from "./models/db";
 import router from "./routes/router";
 import dotenv from "dotenv";
@@ -7,6 +8,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use(
   session({
@@ -16,8 +20,12 @@ app.use(
   })
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 initDb()
   .then(() => {

@@ -2,6 +2,7 @@
   "dependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.12.12",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
@@ -11,6 +12,7 @@
   "version": "1.0.0",
   "main": "src/app.ts",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express-session": "^1.18.0",
     "@types/jsonwebtoken": "^9.0.6",
     "ts-node-dev": "^2.0.0"
