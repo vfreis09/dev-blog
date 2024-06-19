@@ -2,17 +2,23 @@ import { Request, Response } from "express";
 import middlewares from "../middlewares/middleware";
 const pool = require("../config/dbConfig");
 
-const home = async (req: Request, res: Response) => {
+const home = (req: Request, res: Response) => {
+  res.send("hello world!");
+};
+
+const getUser = async (req: Request, res: Response) => {
   if (req.session.user) {
     const { id } = req.session.user;
     const { rows } = await pool.query(
       "SELECT * FROM users WHERE google_id = $1",
       [id]
     );
-    res.json(rows[0]);
+    if (rows.length > 0) {
+      res.json({ isLoggedIn: true, user: rows[0] });
+    }
+    res.json({ isLoggedIn: false });
   }
-
-  console.log("couldnt find the user");
+  res.json({ isLoggedIn: false });
 };
 
 const googleOauthHandler = async (req: Request, res: Response) => {
@@ -58,6 +64,7 @@ const googleOauthHandler = async (req: Request, res: Response) => {
 
 const controller = {
   home,
+  getUser,
   googleOauthHandler,
 };
 
