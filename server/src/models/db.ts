@@ -10,7 +10,7 @@ const initDb = async () => {
     picture VARCHAR(255)
 );
 
-  CREATE TABLE posts (
+  CREATE TABLE IF NOT EXISTS posts (
   id SERIAL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
   content TEXT NOT NULL,
