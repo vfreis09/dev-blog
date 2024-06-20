@@ -31,10 +31,26 @@ function App() {
     checkUserLoggedIn();
   }, []);
 
-  //doenst work when you refresh the page
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserName("");
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.message === "Logged out successfully") {
+        setIsLoggedIn(false);
+        setUserName("");
+      }
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
   return (

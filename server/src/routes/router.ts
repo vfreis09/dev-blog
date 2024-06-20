@@ -9,4 +9,6 @@ router.get("/api/user", controller.getUser);
 
 router.get("/api/sessions/oauth/google", controller.googleOauthHandler);
 
+router.post("/api/logout", controller.logoutHandler);
+
 export default router;
