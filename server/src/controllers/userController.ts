@@ -74,11 +74,11 @@ const logoutHandler = async (req: Request, res: Response) => {
   });
 };
 
-const controller = {
+const userController = {
   home,
   getUser,
   googleOauthHandler,
   logoutHandler,
 };
 
-export default controller;
+export default userController;

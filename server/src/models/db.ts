@@ -8,7 +8,14 @@ const initDb = async () => {
     email VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
     picture VARCHAR(255)
-)`;
+);
+
+  CREATE TABLE posts (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  author_id INTEGER REFERENCES users(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
 
   try {
     await pool.query(createTableQuery);

@@ -2,7 +2,8 @@ import express from "express";
 import session from "express-session";
 import cors from "cors";
 import initDb from "./models/db";
-import router from "./routes/router";
+import userRoutes from "./routes/userRoutes";
+import postRoutes from "./routes/postRoutes";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -36,4 +37,4 @@ initDb()
     console.error("Database initialization failed:", error);
   });
 
-app.use(router);
+app.use(userRoutes, postRoutes);
