@@ -68,7 +68,7 @@ const updatePost = async (req: Request, res: Response) => {
 
 const deletePost = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const authorId = req.session.user.id;
+  const authorId = req.session.user.user_id;
   try {
     const result = await pool.query(
       "DELETE FROM posts WHERE id = $1 AND author_id = $2 RETURNING *",
