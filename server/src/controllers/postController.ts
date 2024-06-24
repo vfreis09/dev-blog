@@ -49,7 +49,7 @@ const getPostById = async (req: Request, res: Response) => {
 const updatePost = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { title, content } = req.body;
-  const authorId = req.session.user.id;
+  const authorId = req.session.user.user_id;
   try {
     const result = await pool.query(
       "UPDATE posts SET title = $1, content = $2 WHERE id = $3 AND author_id = $4 RETURNING *",
