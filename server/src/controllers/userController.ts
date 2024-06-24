@@ -2,10 +2,6 @@ import { Request, Response } from "express";
 import middlewares from "../middlewares/middleware";
 const pool = require("../config/dbConfig");
 
-const home = (req: Request, res: Response) => {
-  res.send("hello world!");
-};
-
 const getUser = async (req: Request, res: Response) => {
   if (req.session.user) {
     const { id } = req.session.user;
@@ -75,7 +71,6 @@ const logoutHandler = async (req: Request, res: Response) => {
 };
 
 const userController = {
-  home,
   getUser,
   googleOauthHandler,
   logoutHandler,
