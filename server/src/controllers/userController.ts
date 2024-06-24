@@ -54,9 +54,9 @@ const googleOauthHandler = async (req: Request, res: Response) => {
         );
       }
 
-      req.session.user = googleUser;
+      //put the googleUser in the session and the user_id in the end
+      req.session.user = { ...googleUser, user_id: rows[0].id };
     }
-
     res.redirect("http://localhost:5173/");
   } catch (error) {
     console.error("Error in googleOauthHandler:", error);

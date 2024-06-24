@@ -19,6 +19,7 @@ interface GoogleUserResult {
   family_name: string;
   picture: string;
   locale: string;
+  user_id: number;
 }
 
 async function getGoogleOauthTokens({

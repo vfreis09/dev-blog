@@ -2,8 +2,11 @@ import { Request, Response } from "express";
 const pool = require("../config/dbConfig");
 
 const createPost = async (req: Request, res: Response) => {
+  if (!req.session.user) {
+    return res.status(401).send("Unauthorized");
+  }
   const { title, content } = req.body;
-  const authorId = req.session.user.id;
+  const authorId = req.session.user.user_id;
   try {
     const result = await pool.query(
       "INSERT INTO posts (title, content, author_id) VALUES ($1, $2, $3) RETURNING *",
