@@ -1,13 +1,47 @@
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import Post from "../components/Post";
 import Header from "../components/Header";
 
 function PostDetails() {
-  return (
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [post, setPost] = useState<Post | null>(null);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/${id}`);
+        const data = await response.json();
+        setPost(data);
+      } catch (error) {
+        console.error("Error fetching post:", error);
+      }
+    };
+
+    fetchPost();
+  }, [id]);
+
+  const handleDelete = async (postId: number) => {
+    try {
+      const response = await fetch(`http://localhost:3000/${postId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (response.ok) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+  return post ? (
     <>
       <Header />
-      <div>
-        <h1>ello</h1>
-      </div>
+      <Post post={post} onDelete={handleDelete} />
     </>
+  ) : (
+    <p>Loading...</p>
   );
 }
 
