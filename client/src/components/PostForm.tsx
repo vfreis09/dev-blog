@@ -15,7 +15,7 @@ const PostForm: React.FC<PostFormProps> = ({ isEditing }) => {
     if (isEditing) {
       const fetchPost = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/api/posts/${id}`);
+          const response = await fetch(`http://localhost:3000/${id}`);
           const data = await response.json();
           setTitle(data.title);
           setContent(data.content);

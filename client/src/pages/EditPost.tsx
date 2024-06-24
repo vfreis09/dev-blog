@@ -1,12 +1,12 @@
 import Header from "../components/Header";
+import PostForm from "../components/PostForm";
 
 function EditPost() {
   return (
     <>
       <Header />
-      <div>
-        <h1>ello</h1>
-      </div>
+      <h1>Edit your Post</h1>
+      <PostForm isEditing={true} />
     </>
   );
 }
