@@ -11,7 +11,7 @@ function PostDetails() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/${id}`);
+        const response = await fetch(`http://localhost:3000/api/posts/${id}`);
         const data = await response.json();
         setPost(data);
       } catch (error) {
@@ -24,10 +24,13 @@ function PostDetails() {
 
   const handleDelete = async (postId: number) => {
     try {
-      const response = await fetch(`http://localhost:3000/${postId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `http://localhost:3000/api/posts/${postId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         navigate("/");
       }

@@ -37,4 +37,8 @@ initDb()
     console.error("Database initialization failed:", error);
   });
 
-app.use(userRoutes, postRoutes);
+app.use("/api", userRoutes, postRoutes);
+
+app.get("/", (req, res) => {
+  res.redirect("/api/posts");
+});

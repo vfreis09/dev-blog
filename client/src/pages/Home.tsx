@@ -14,7 +14,7 @@ function HomePage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch("http://localhost:3000/");
+        const response = await fetch("http://localhost:3000/api/posts/");
         const data = await response.json();
         setPosts(data);
       } catch (error) {
