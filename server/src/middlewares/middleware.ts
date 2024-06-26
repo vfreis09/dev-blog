@@ -93,10 +93,17 @@ const isAuthorized = async (
   next: NextFunction
 ) => {
   const postId = req.params.id; // Assuming the post ID is passed in the request params
+
+  // Check if session and user ID are defined
+  if (!req.session || !req.session.user || !req.session.user.user_id) {
+    return res
+      .status(401)
+      .json({ message: "You need to log in to perform this action" });
+  }
+
   const userId = req.session.user.user_id; // Assuming you have the user ID in the session
 
   try {
-    //this line is wrong
     const post = await pool.query("SELECT author_id FROM posts WHERE id = $1", [
       postId,
     ]);
