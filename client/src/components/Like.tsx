@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { useUser } from "../context/UserContext";
 
 interface LikesProps {
   postId: string | undefined;
-  userId: string | undefined;
 }
 
 const Likes: React.FC<LikesProps> = ({ postId }) => {
+  const { userId } = useUser();
   const [likes, setLikes] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
 
@@ -14,7 +15,6 @@ const Likes: React.FC<LikesProps> = ({ postId }) => {
       const response = await fetch(`http://localhost:3000/api/likes/${postId}`);
       const data = await response.json();
       setLikes(data.length);
-      // Assume the response includes whether the user has liked the post
       setHasLiked(
         data.some((like: { author_id: string }) => like.author_id === userId)
       );

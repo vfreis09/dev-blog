@@ -1,35 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import getGoogleOauthUrl from "../utils/getGoogleUrl";
+import { useUser } from "../context/UserContext";
 
 const Header: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
+  const { user, isLoggedIn, setUser, setIsLoggedIn } = useUser();
 
-  useEffect(() => {
-    const checkUserLoggedIn = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/user", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-        const data = await response.json();
-        if (data.isLoggedIn) {
-          setIsLoggedIn(true);
-          setUserName(data.user.name);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (error) {
-        console.error("Error checking login status:", error);
-      }
-    };
-
-    checkUserLoggedIn();
-  }, []);
+  console.log(user);
 
   const handleLogout = async () => {
     try {
@@ -46,7 +23,7 @@ const Header: React.FC = () => {
       const data = await response.json();
       if (data.message === "Logged out successfully") {
         setIsLoggedIn(false);
-        setUserName("");
+        setUser(null);
       }
     } catch (error) {
       console.error("Error logging out:", error);
@@ -60,7 +37,7 @@ const Header: React.FC = () => {
         {isLoggedIn ? (
           <>
             <Link to="/create">Create Post</Link>
-            <span>Welcome, {userName}</span>
+            <span>Welcome, {user?.name}</span>
             <button onClick={handleLogout}>Logout</button>
           </>
         ) : (
