@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 interface LikesProps {
   postId: string | undefined;
@@ -9,6 +10,7 @@ const Likes: React.FC<LikesProps> = ({ postId }) => {
   const { userId } = useUser();
   const [likes, setLikes] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLikes = async () => {
@@ -24,6 +26,11 @@ const Likes: React.FC<LikesProps> = ({ postId }) => {
   }, [postId]);
 
   const handleLike = async () => {
+    if (!userId) {
+      alert("You need to be logged in to like a post");
+      navigate("/login");
+      return;
+    }
     if (hasLiked) {
       await fetch(`http://localhost:3000/api/likes/${postId}`, {
         method: "DELETE",
