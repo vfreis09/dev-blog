@@ -23,7 +23,7 @@ const Likes: React.FC<LikesProps> = ({ postId }) => {
     };
 
     fetchLikes();
-  }, [postId]);
+  }, [postId, userId]);
 
   const handleLike = async () => {
     if (!userId) {
