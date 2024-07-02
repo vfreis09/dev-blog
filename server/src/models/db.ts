@@ -18,13 +18,13 @@ const initDb = async () => {
   
     CREATE TABLE IF NOT EXISTS likes (
     id SERIAL PRIMARY KEY,
-    post_id INT REFERENCES posts(id),
+    post_id INT REFERENCES posts(id) ON DELETE CASCADE,
     author_id INTEGER REFERENCES users(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
     CREATE TABLE IF NOT EXISTS comments (
     id SERIAL PRIMARY KEY,
-    post_id INT REFERENCES posts(id),
+    post_id INT REFERENCES posts(id) ON DELETE CASCADE,
     author_id INTEGER REFERENCES users(id),
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
