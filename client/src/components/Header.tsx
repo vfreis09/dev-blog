@@ -6,8 +6,6 @@ import { useUser } from "../context/UserContext";
 const Header: React.FC = () => {
   const { user, isLoggedIn, setUser, setIsLoggedIn } = useUser();
 
-  console.log(user);
-
   const handleLogout = async () => {
     try {
       const response = await fetch("http://localhost:3000/api/logout", {

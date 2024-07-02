@@ -20,6 +20,7 @@ interface UserContextProps {
   setUser: (user: User | null) => void;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
   userId: string | null;
+  loading: boolean;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -30,6 +31,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
@@ -48,20 +50,21 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
           setUserId(data.user.id);
         } else {
           setIsLoggedIn(false);
-          setUser(data.user);
+          setUser(null);
           setUserId(null);
         }
       } catch (error) {
         console.error("Error checking login status:", error);
+      } finally {
+        setLoading(false);
       }
     };
-
     checkUserLoggedIn();
   }, []);
 
   return (
     <UserContext.Provider
-      value={{ user, isLoggedIn, setUser, setIsLoggedIn, userId }}
+      value={{ user, isLoggedIn, loading, setUser, setIsLoggedIn, userId }}
     >
       {children}
     </UserContext.Provider>
