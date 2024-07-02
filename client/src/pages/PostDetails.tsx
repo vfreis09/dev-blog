@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Post from "../components/Post";
 import Likes from "../components/Like";
 import Header from "../components/Header";
+import Comments from "../components/Comment";
 
 function PostDetails() {
   const { id } = useParams<{ id: string }>();
@@ -44,6 +45,7 @@ function PostDetails() {
       <Header />
       <Post post={post} onDelete={handleDelete} />
       <Likes postId={id} />
+      <Comments postId={id} />
     </>
   ) : (
     <p>Loading...</p>
