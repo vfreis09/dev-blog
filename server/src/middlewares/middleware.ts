@@ -92,16 +92,15 @@ const isAuthorized = async (
   res: Response,
   next: NextFunction
 ) => {
-  const postId = req.params.id; // Assuming the post ID is passed in the request params
+  const postId = req.params.id;
 
-  // Check if session and user ID are defined
   if (!req.session || !req.session.user || !req.session.user.user_id) {
     return res
       .status(401)
       .json({ message: "You need to log in to perform this action" });
   }
 
-  const userId = req.session.user.user_id; // Assuming you have the user ID in the session
+  const userId = req.session.user.user_id;
 
   try {
     const post = await pool.query("SELECT author_id FROM posts WHERE id = $1", [
@@ -115,7 +114,7 @@ const isAuthorized = async (
       return res.status(403).send("Unauthorized");
     }
 
-    next(); // User is authorized, proceed to the next middleware
+    next();
   } catch (error) {
     console.error("Error checking authorization:", error);
     res.status(500).send("Server error");

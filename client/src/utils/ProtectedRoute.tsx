@@ -10,7 +10,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isLoggedIn, loading } = useUser();
 
   if (loading) {
-    return <div>Loading...</div>; // or a loading spinner
+    return <div>Loading...</div>;
   }
 
   if (!isLoggedIn) {

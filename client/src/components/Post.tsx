@@ -21,9 +21,12 @@ const Post: React.FC<PostProps> = ({ post, onDelete }) => {
     <div>
       <h2>{post.title}</h2>
       <p>{post.content}</p>
-      <Link to={`/edit/${post.id}`}>Edit</Link>
+
       {post.author_id === userId && (
-        <button onClick={() => onDelete(post.id)}>Delete</button>
+        <>
+          <button onClick={() => onDelete(post.id)}>Delete</button>
+          <Link to={`/edit/${post.id}`}>Edit</Link>
+        </>
       )}
     </div>
   );
