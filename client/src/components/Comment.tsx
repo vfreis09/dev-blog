@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 interface CommentProps {
   postId: number | undefined;
@@ -12,9 +13,11 @@ interface Comment {
 }
 
 const Comments: React.FC<CommentProps> = ({ postId }) => {
-  const { userId } = useUser();
+  const { userId, isLoggedIn } = useUser();
   const [comments, setComments] = useState<Comment[]>([]);
   const [content, setContent] = useState("");
+
+  const navigate = useNavigate();
 
   const fetchComments = async () => {
     if (!postId) return;
@@ -78,14 +81,23 @@ const Comments: React.FC<CommentProps> = ({ postId }) => {
 
   return (
     <div>
-      <div>
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Write a comment..."
-        ></textarea>
-        <button onClick={handleComment}>Submit</button>
-      </div>
+      {isLoggedIn ? (
+        <div>
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Write a comment..."
+          ></textarea>
+          <button onClick={handleComment}>Submit</button>
+        </div>
+      ) : (
+        <div
+          onClick={() => navigate("/login")}
+          style={{ color: "grey", cursor: "pointer" }}
+        >
+          Log in to write a comment
+        </div>
+      )}
       <div>
         {comments.map((comment) => (
           <div key={comment.id}>
