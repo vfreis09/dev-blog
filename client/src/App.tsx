@@ -1,12 +1,12 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import HomePage from "./pages/Home";
+import HomePage from "./pages/Home/Home";
 import "./App.css";
-import CreatePost from "./pages/CreatePost";
-import EditPost from "./pages/EditPost";
-import PostDetails from "./pages/PostDetails";
+import CreatePost from "./pages/CreatePost/CreatePost";
+import EditPost from "./pages/EditPost/EditPost";
+import PostDetails from "./pages/PostDetails/PostDetails";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import LoginPage from "./pages/Login";
+import LoginPage from "./pages/Login/Login";
 import { UserProvider } from "./context/UserContext";
 
 const App: React.FC = () => {

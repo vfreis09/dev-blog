@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import getGoogleOauthUrl from "../utils/getGoogleUrl";
-import { useUser } from "../context/UserContext";
+import getGoogleOauthUrl from "../../utils/getGoogleUrl";
+import { useUser } from "../../context/UserContext";
 
 const Header: React.FC = () => {
   const { user, isLoggedIn, setUser, setIsLoggedIn } = useUser();

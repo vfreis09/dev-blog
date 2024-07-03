@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Post from "../components/Post";
-import Likes from "../components/Like";
-import Header from "../components/Header";
-import Comments from "../components/Comment";
+import Post from "../../components/Post/Post";
+import Likes from "../../components/Like/Like";
+import Header from "../../components/Header/Header";
+import Comments from "../../components/Comment/Comment";
 
 function PostDetails() {
   const { id } = useParams<{ id: string }>();

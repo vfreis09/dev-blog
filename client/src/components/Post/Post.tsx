@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../../context/UserContext";
 
 interface Post {
   id: number;
