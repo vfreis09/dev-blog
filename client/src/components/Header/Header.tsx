@@ -2,6 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import getGoogleOauthUrl from "../../utils/getGoogleUrl";
 import { useUser } from "../../context/UserContext";
+import Button from "react-bootstrap/Button";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import Container from "react-bootstrap/Container";
 
 const Header: React.FC = () => {
   const { user, isLoggedIn, setUser, setIsLoggedIn } = useUser();
@@ -29,22 +33,42 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header>
-      <nav>
-        <Link to="/">Home</Link>
-        {isLoggedIn ? (
-          <>
-            <Link to="/create">Create Post</Link>
-            <span>Welcome, {user?.name}</span>
-            <button onClick={handleLogout}>Logout</button>
-          </>
-        ) : (
-          <>
-            <Link to={getGoogleOauthUrl()}>Login</Link>
-          </>
-        )}
-      </nav>
-    </header>
+    <Navbar bg="light" expand="lg">
+      <Container>
+        <Navbar.Brand as={Link} to="/">
+          dev-blog
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            {isLoggedIn && (
+              <Nav.Link as={Link} to="/create">
+                Create Post
+              </Nav.Link>
+            )}
+          </Nav>
+          <Nav>
+            {isLoggedIn ? (
+              <>
+                <Nav.Link disabled>Welcome, {user?.name}</Nav.Link>
+                <Button variant="outline-primary" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Button variant="outline-success">
+                <Link
+                  to={getGoogleOauthUrl()}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Login
+                </Link>
+              </Button>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
