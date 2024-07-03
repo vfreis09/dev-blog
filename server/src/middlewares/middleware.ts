@@ -92,7 +92,7 @@ const isAuthorized = async (
   res: Response,
   next: NextFunction
 ) => {
-  const postId = req.params.id;
+  const postId = parseInt(req.params.id);
 
   if (!req.session || !req.session.user || !req.session.user.user_id) {
     return res

@@ -10,19 +10,27 @@ function PostDetails() {
   const navigate = useNavigate();
   const [post, setPost] = useState<Post | null>(null);
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/api/posts/${id}`);
-        const data = await response.json();
-        setPost(data);
-      } catch (error) {
-        console.error("Error fetching post:", error);
-      }
-    };
+  const postId = parseInt(id ?? "");
 
-    fetchPost();
-  }, [id]);
+  useEffect(() => {
+    if (!isNaN(postId)) {
+      const fetchPost = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:3000/api/posts/${postId}`
+          );
+          const data = await response.json();
+          setPost(data);
+        } catch (error) {
+          console.error("Error fetching post:", error);
+        }
+      };
+
+      fetchPost();
+    } else {
+      console.error("Invalid postId:", postId);
+    }
+  }, [postId]);
 
   const handleDelete = async (postId: number) => {
     try {
@@ -44,8 +52,8 @@ function PostDetails() {
     <>
       <Header />
       <Post post={post} onDelete={handleDelete} />
-      <Likes postId={id} />
-      <Comments postId={id} />
+      <Likes postId={postId} />
+      <Comments postId={postId} />
     </>
   ) : (
     <p>Loading...</p>

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 
 interface CommentProps {
-  postId: string | undefined;
+  postId: number | undefined;
 }
 
 interface Comment {
-  id: string;
+  id: number;
   content: string;
-  author_id: string;
+  author_id: number;
 }
 
 const Comments: React.FC<CommentProps> = ({ postId }) => {
@@ -64,7 +64,7 @@ const Comments: React.FC<CommentProps> = ({ postId }) => {
     }
   };
 
-  const handleDeleteComment = async (commentId: string) => {
+  const handleDeleteComment = async (commentId: number) => {
     try {
       await fetch(`http://localhost:3000/api/comments/${commentId}`, {
         method: "DELETE",

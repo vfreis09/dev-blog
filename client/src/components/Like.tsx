@@ -3,7 +3,7 @@ import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 interface LikesProps {
-  postId: string | undefined;
+  postId: number | undefined;
 }
 
 const Likes: React.FC<LikesProps> = ({ postId }) => {
@@ -18,7 +18,7 @@ const Likes: React.FC<LikesProps> = ({ postId }) => {
       const data = await response.json();
       setLikes(data.length);
       setHasLiked(
-        data.some((like: { author_id: string }) => like.author_id === userId)
+        data.some((like: { author_id: number }) => like.author_id === userId)
       );
     };
 

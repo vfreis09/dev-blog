@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 const pool = require("../config/dbConfig");
 
 const getComment = async (req: Request, res: Response) => {
-  const { postId } = req.params;
+  const postId = parseInt(req.params.postId);
   const { rows } = await pool.query(
     "SELECT * FROM comments WHERE post_id = $1",
     [postId]
@@ -11,7 +11,7 @@ const getComment = async (req: Request, res: Response) => {
 };
 
 const postComment = async (req: Request, res: Response) => {
-  const { postId } = req.params;
+  const postId = parseInt(req.params.postId);
   const authorId = req.session.user.user_id;
   const { content } = req.body;
   await pool.query(
@@ -22,7 +22,7 @@ const postComment = async (req: Request, res: Response) => {
 };
 
 const deleteComment = async (req: Request, res: Response) => {
-  const { commentId } = req.params;
+  const commentId = parseInt(req.params.commentId);
   const authorId = req.session.user.user_id;
   await pool.query("DELETE FROM comments WHERE id = $1 AND author_id = $2", [
     commentId,

@@ -32,7 +32,7 @@ const getPosts = async (req: Request, res: Response) => {
 };
 
 const getPostById = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id);
   try {
     const result = await pool.query("SELECT * FROM posts WHERE id = $1", [id]);
     if (result.rows.length > 0) {
@@ -47,7 +47,7 @@ const getPostById = async (req: Request, res: Response) => {
 };
 
 const updatePost = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id);
   const { title, content } = req.body;
   const authorId = req.session.user.user_id;
   try {
@@ -67,7 +67,7 @@ const updatePost = async (req: Request, res: Response) => {
 };
 
 const deletePost = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id);
   const authorId = req.session.user.user_id;
   try {
     const result = await pool.query(

@@ -11,11 +11,15 @@ const PostForm: React.FC<PostFormProps> = ({ isEditing }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
+  const postId = parseInt(id ?? "");
+
   useEffect(() => {
-    if (isEditing) {
+    if (isEditing && !isNaN(postId)) {
       const fetchPost = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/api/posts/${id}`);
+          const response = await fetch(
+            `http://localhost:3000/api/posts/${postId}`
+          );
           const data = await response.json();
           setTitle(data.title);
           setContent(data.content);
@@ -26,14 +30,14 @@ const PostForm: React.FC<PostFormProps> = ({ isEditing }) => {
 
       fetchPost();
     }
-  }, [id, isEditing]);
+  }, [postId, isEditing]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const postData = { title, content };
     try {
       const response = await fetch(
-        `http://localhost:3000/api/posts/${isEditing ? `${id}` : ""}`,
+        `http://localhost:3000/api/posts/${isEditing ? `${postId}` : ""}`,
         {
           method: isEditing ? "PUT" : "POST",
           headers: {
@@ -61,6 +65,7 @@ const PostForm: React.FC<PostFormProps> = ({ isEditing }) => {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
         />
       </div>
       <div>
@@ -68,6 +73,7 @@ const PostForm: React.FC<PostFormProps> = ({ isEditing }) => {
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
+          required
         />
       </div>
       <button type="submit">{isEditing ? "Update" : "Create"} Post</button>
