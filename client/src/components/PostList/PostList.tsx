@@ -14,7 +14,7 @@ interface PostListProps {
 
 const PostList: React.FC<PostListProps> = ({ posts }) => {
   return (
-    <Container>
+    <Container className="pt-5">
       <Row className="justify-content-center mt-4">
         <Col md={8}>
           <h1 className="display-4 text-center">Blog Posts</h1>

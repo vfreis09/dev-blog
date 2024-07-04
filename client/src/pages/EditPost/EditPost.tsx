@@ -5,7 +5,6 @@ function EditPost() {
   return (
     <>
       <Header />
-      <h1>Edit your Post</h1>
       <PostForm isEditing={true} />
     </>
   );

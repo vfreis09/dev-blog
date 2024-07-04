@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { Button, Card, Form } from "react-bootstrap";
 
 interface CommentProps {
   postId: number | undefined;
@@ -82,32 +83,48 @@ const Comments: React.FC<CommentProps> = ({ postId }) => {
   return (
     <div>
       {isLoggedIn ? (
-        <div>
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Write a comment..."
-          ></textarea>
-          <button onClick={handleComment}>Submit</button>
-        </div>
+        <Card className="m-5">
+          <Card.Body>
+            <Form.Group controlId="commentTextarea">
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Write a comment..."
+                className="mb-3"
+              />
+            </Form.Group>
+            <Button variant="primary" onClick={handleComment}>
+              Submit
+            </Button>
+          </Card.Body>
+        </Card>
       ) : (
         <div
           onClick={() => navigate("/login")}
           style={{ color: "grey", cursor: "pointer" }}
+          className="m-5"
         >
           Log in to write a comment
         </div>
       )}
-      <div>
+      <div className="m-5">
         {comments.map((comment) => (
-          <div key={comment.id}>
-            <p>{comment.content}</p>
-            {comment.author_id === userId && (
-              <button onClick={() => handleDeleteComment(comment.id)}>
-                Delete
-              </button>
-            )}
-          </div>
+          <Card key={comment.id} className="mb-3">
+            <Card.Body>
+              <Card.Text>{comment.content}</Card.Text>
+              {comment.author_id === userId && (
+                <Button
+                  variant="danger"
+                  onClick={() => handleDeleteComment(comment.id)}
+                  className="m-2"
+                >
+                  Delete
+                </Button>
+              )}
+            </Card.Body>
+          </Card>
         ))}
       </div>
     </div>

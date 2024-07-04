@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 interface LikesProps {
   postId: number | undefined;
@@ -48,8 +49,10 @@ const Likes: React.FC<LikesProps> = ({ postId }) => {
   };
 
   return (
-    <div>
-      <button onClick={handleLike}>{hasLiked ? "Unlike" : "Like"}</button>
+    <div className="m-5">
+      <Button variant={hasLiked ? "danger" : "primary"} onClick={handleLike}>
+        {hasLiked ? "Unlike" : "Like"}
+      </Button>
       <p>{likes} likes</p>
     </div>
   );

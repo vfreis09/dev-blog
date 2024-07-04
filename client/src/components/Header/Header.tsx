@@ -33,7 +33,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <Navbar bg="primary" data-bs-theme="dark" expand="lg">
+    <Navbar sticky="top" bg="primary" data-bs-theme="dark" expand="lg">
       <Container>
         <Navbar.Brand as={Link} to="/">
           dev-blog
@@ -56,7 +56,7 @@ const Header: React.FC = () => {
                 </Button>
               </>
             ) : (
-              <Button variant="outline-success">
+              <Button variant="success">
                 <Link
                   to={getGoogleOauthUrl()}
                   style={{ textDecoration: "none", color: "inherit" }}
