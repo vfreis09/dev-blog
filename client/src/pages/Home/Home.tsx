@@ -29,7 +29,6 @@ function HomePage() {
     <>
       <Header />
       <div>
-        <h1>Blog Posts</h1>
         <PostList posts={posts} />
       </div>
     </>

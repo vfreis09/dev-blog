@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/Home/Home";
-import "./App.css";
 import CreatePost from "./pages/CreatePost/CreatePost";
 import EditPost from "./pages/EditPost/EditPost";
 import PostDetails from "./pages/PostDetails/PostDetails";

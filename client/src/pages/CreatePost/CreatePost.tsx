@@ -5,7 +5,6 @@ function CreatePost() {
   return (
     <>
       <Header />
-      <h1>Create a New Post</h1>
       <PostForm isEditing={false} />
     </>
   );

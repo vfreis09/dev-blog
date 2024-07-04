@@ -33,7 +33,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="primary" data-bs-theme="dark" expand="lg">
       <Container>
         <Navbar.Brand as={Link} to="/">
           dev-blog
@@ -51,7 +51,7 @@ const Header: React.FC = () => {
             {isLoggedIn ? (
               <>
                 <Nav.Link disabled>Welcome, {user?.name}</Nav.Link>
-                <Button variant="outline-primary" onClick={handleLogout}>
+                <Button variant="outline-light" onClick={handleLogout}>
                   Logout
                 </Button>
               </>

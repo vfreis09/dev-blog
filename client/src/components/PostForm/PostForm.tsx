@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
 interface PostFormProps {
   isEditing: boolean;
@@ -58,26 +59,41 @@ const PostForm: React.FC<PostFormProps> = ({ isEditing }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Title:</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Content:</label>
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
-        />
-      </div>
-      <button type="submit">{isEditing ? "Update" : "Create"} Post</button>
-    </form>
+    <Container>
+      <Row className="justify-content-md-center mt-5">
+        <Col md={8} lg={6}>
+          <h2 className="text-center mb-4">
+            {isEditing ? "Edit Post" : "Create Post"}
+          </h2>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formTitle">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId="formContent" className="mt-3">
+              <Form.Label>Content</Form.Label>
+              <Form.Control
+                as="textarea"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                rows={5}
+                required
+              />
+            </Form.Group>
+            <div className="text-center mt-4">
+              <Button variant="primary" type="submit">
+                {isEditing ? "Update" : "Create"} Post
+              </Button>
+            </div>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
