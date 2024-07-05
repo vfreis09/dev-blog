@@ -24,7 +24,7 @@ const Post: React.FC<PostProps> = ({ post, onDelete }) => {
         <Card.Title>{post.title}</Card.Title>
         <Card.Text>{post.content}</Card.Text>
         {post.author_id === userId && (
-          <Row className="justify-content-center mt-3">
+          <Row className="justify-content-end mt-3">
             <Col xs="auto">
               <Button
                 variant="danger"

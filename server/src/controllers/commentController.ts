@@ -3,11 +3,20 @@ const pool = require("../config/dbConfig");
 
 const getComment = async (req: Request, res: Response) => {
   const postId = parseInt(req.params.postId);
-  const { rows } = await pool.query(
-    "SELECT * FROM comments WHERE post_id = $1",
-    [postId]
-  );
-  res.json(rows);
+  try {
+    const comments = await pool.query(
+      `
+      SELECT comments.id, comments.content, comments.author_id, users.name as author_name
+      FROM comments
+      JOIN users ON comments.author_id = users.id
+      WHERE comments.post_id = $1
+    `,
+      [postId]
+    );
+    res.json(comments.rows);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch comments" });
+  }
 };
 
 const postComment = async (req: Request, res: Response) => {
