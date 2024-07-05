@@ -115,7 +115,7 @@ const Comments: React.FC<CommentProps> = ({ postId }) => {
           <Card key={comment.id} className="mb-3">
             <Card.Body>
               <Card.Text>
-                <strong>{comment.author_name}</strong>: {comment.content}
+                <strong>{comment.author_name}</strong>
               </Card.Text>
               <Card.Text>{comment.content}</Card.Text>
               {comment.author_id === userId && (
