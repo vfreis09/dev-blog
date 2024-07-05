@@ -8,6 +8,7 @@ interface Post {
   title: string;
   content: string;
   author_id: number;
+  author_name: string;
 }
 
 interface PostProps {
@@ -21,6 +22,9 @@ const Post: React.FC<PostProps> = ({ post, onDelete }) => {
   return (
     <Card className="m-5">
       <Card.Body>
+        <Card.Subtitle className="mb-2 text-muted">
+          {post.author_name}
+        </Card.Subtitle>
         <Card.Title>{post.title}</Card.Title>
         <Card.Text>{post.content}</Card.Text>
         {post.author_id === userId && (
