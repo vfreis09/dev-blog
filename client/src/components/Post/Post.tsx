@@ -9,6 +9,7 @@ interface Post {
   content: string;
   author_id: number;
   author_name: string;
+  created_at: string;
 }
 
 interface PostProps {
@@ -23,7 +24,7 @@ const Post: React.FC<PostProps> = ({ post, onDelete }) => {
     <Card className="m-5">
       <Card.Body>
         <Card.Subtitle className="mb-2 text-muted">
-          {post.author_name}
+          {`${post.author_name} • ${post.created_at}`}
         </Card.Subtitle>
         <Card.Title>{post.title}</Card.Title>
         <Card.Text>{post.content}</Card.Text>
