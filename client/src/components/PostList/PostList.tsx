@@ -1,12 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Card, ListGroup, Container, Row, Col } from "react-bootstrap";
+import { Card, ListGroup, Container, Row, Col, Image } from "react-bootstrap";
+import { formatDistanceToNow } from "date-fns";
+import Likes from "../../components/Like/Like";
 import "./PostList.css";
 
 interface Post {
   id: number;
   title: string;
   content: string;
+  author_name: string;
+  author_picture: string;
+  created_at: string;
 }
 
 interface PostListProps {
@@ -21,19 +26,30 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
           <h1 className="display-4 text-center">Blog Posts</h1>
           <ListGroup className="post-list">
             {posts.map((post) => (
-              <ListGroup.Item
-                key={post.id}
-                as="div"
-                className="mb-3 border-0 p-0"
-              >
+              <ListGroup.Item key={post.id} className="mb-3 border-0 p-0">
                 <Card>
                   <Card.Body>
+                    <Card.Subtitle className="mb-2 text-muted">
+                      <Image
+                        src={post.author_picture}
+                        roundedCircle
+                        height="24"
+                        width="24"
+                        alt="User Avatar"
+                        className="userImage"
+                      />
+                      {`${post.author_name} \u2022 ${formatDistanceToNow(
+                        new Date(post.created_at),
+                        { addSuffix: true }
+                      )}`}
+                    </Card.Subtitle>
                     <Card.Title>
                       <Link to={`/post/${post.id}`} className="post-title-link">
                         {post.title}
                       </Link>
                     </Card.Title>
                     <Card.Text>{post.content}</Card.Text>
+                    <Likes postId={post.id} />
                   </Card.Body>
                 </Card>
               </ListGroup.Item>

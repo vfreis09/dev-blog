@@ -52,7 +52,9 @@ function PostDetails() {
     <>
       <Header />
       <Post post={post} onDelete={handleDelete} />
-      <Likes postId={postId} />
+      <div className="m-5">
+        <Likes postId={postId} />
+      </div>
       <Comments postId={postId} />
     </>
   ) : (

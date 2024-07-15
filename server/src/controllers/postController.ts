@@ -22,7 +22,14 @@ const createPost = async (req: Request, res: Response) => {
 const getPosts = async (req: Request, res: Response) => {
   try {
     const result = await pool.query(
-      "SELECT * FROM posts ORDER BY created_at DESC"
+      `SELECT posts.id AS 
+        id, posts.title, posts.content, 
+        posts.created_at AS created_at, 
+        users.name AS author_name, 
+        users.picture AS author_picture 
+        FROM posts JOIN users ON posts.author_id = users.id 
+        ORDER BY posts.created_at DESC
+    `
     );
     res.json(result.rows);
   } catch (error) {
