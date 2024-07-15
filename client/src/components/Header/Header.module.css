@@ -1,0 +1,15 @@
+.collapseContainer {
+  position: absolute;
+  top: 56px;
+  right: 10px;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  width: 250px;
+}
+
+.navBrand {
+  margin-left: 15px;
+}
