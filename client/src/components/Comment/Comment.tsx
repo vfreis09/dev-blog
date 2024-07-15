@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Form, Image } from "react-bootstrap";
+import { Button, Card, Form, Image, Row, Col } from "react-bootstrap";
+import { useUser } from "../../context/UserContext";
+import Likes from "../../components/Like/Like";
 
 interface CommentProps {
   postId: number | undefined;
@@ -127,14 +128,21 @@ const Comments: React.FC<CommentProps> = ({ postId }) => {
                 <strong>{comment.author_name}</strong>
               </Card.Text>
               <Card.Text>{comment.content}</Card.Text>
-              {comment.author_id === userId && (
-                <Button
-                  variant="danger"
-                  onClick={() => handleDeleteComment(comment.id)}
-                >
-                  Delete
-                </Button>
-              )}
+              <Row className="align-items-center">
+                <Col>
+                  <Likes itemId={comment.id} type="comment" />
+                </Col>
+                <Col>
+                  {comment.author_id === userId && (
+                    <Button
+                      variant="danger"
+                      onClick={() => handleDeleteComment(comment.id)}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </Col>
+              </Row>
             </Card.Body>
           </Card>
         ))}

@@ -48,7 +48,7 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
                       </Link>
                     </Card.Title>
                     <Card.Text>{post.content}</Card.Text>
-                    <Likes postId={post.id} />
+                    <Likes itemId={post.id} type="post" />
                   </Card.Body>
                 </Card>
               </ListGroup.Item>

@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
 interface LikesProps {
-  postId: number | undefined;
+  itemId: number | undefined;
+  type: "post" | "comment";
 }
 
-const Likes: React.FC<LikesProps> = ({ postId }) => {
+const Likes: React.FC<LikesProps> = ({ itemId, type }) => {
   const { userId } = useUser();
   const [likes, setLikes] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
@@ -15,7 +16,10 @@ const Likes: React.FC<LikesProps> = ({ postId }) => {
 
   useEffect(() => {
     const fetchLikes = async () => {
-      const response = await fetch(`http://localhost:3000/api/likes/${postId}`);
+      if (!itemId || !type) return;
+      const response = await fetch(
+        `http://localhost:3000/api/likes/${type}/${itemId}`
+      );
       const data = await response.json();
       setLikes(data.length);
       setHasLiked(
@@ -24,7 +28,7 @@ const Likes: React.FC<LikesProps> = ({ postId }) => {
     };
 
     fetchLikes();
-  }, [postId, userId]);
+  }, [itemId, type, userId]);
 
   const handleLike = async () => {
     if (!userId) {
@@ -33,13 +37,13 @@ const Likes: React.FC<LikesProps> = ({ postId }) => {
       return;
     }
     if (hasLiked) {
-      await fetch(`http://localhost:3000/api/likes/${postId}`, {
+      await fetch(`http://localhost:3000/api/likes/${type}/${itemId}`, {
         method: "DELETE",
         credentials: "include",
       });
       setLikes(likes - 1);
     } else {
-      await fetch(`http://localhost:3000/api/likes/${postId}`, {
+      await fetch(`http://localhost:3000/api/likes/${type}/${itemId}`, {
         method: "POST",
         credentials: "include",
       });

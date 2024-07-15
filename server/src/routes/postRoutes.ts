@@ -18,9 +18,12 @@ router.delete(
 );
 
 //like routes
-router.get("/likes/:postId", likeController.getLike);
-router.post("/likes/:postId", likeController.postLike);
-router.delete("/likes/:postId", likeController.deleteLike);
+router.get("/likes/post/:postId", likeController.getPostLike);
+router.get("/likes/comment/:commentId", likeController.getCommentLike);
+router.post("/likes/post/:postId", likeController.postLike);
+router.post("/likes/comment/:commentId", likeController.commentLike);
+router.delete("/likes/post/:postId", likeController.deletePostLike);
+router.delete("/likes/comment/:commentId", likeController.deleteCommentLike);
 
 //comment routes
 router.get("/comments/:postId", commentController.getComment);
