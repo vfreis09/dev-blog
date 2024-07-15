@@ -6,6 +6,7 @@ import "./PostList.css";
 interface Post {
   id: number;
   title: string;
+  content: string;
 }
 
 interface PostListProps {
@@ -32,6 +33,7 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
                         {post.title}
                       </Link>
                     </Card.Title>
+                    <Card.Text>{post.content}</Card.Text>
                   </Card.Body>
                 </Card>
               </ListGroup.Item>

@@ -24,7 +24,7 @@ function HomePage() {
 
     fetchPosts();
   }, []);
-
+  console.log(posts);
   return (
     <>
       <Header />
