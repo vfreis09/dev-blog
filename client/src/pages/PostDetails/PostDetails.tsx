@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Post from "../../components/Post/Post";
+import Likes from "../../components/Like/Like";
 import Header from "../../components/Header/Header";
 import Comments from "../../components/Comment/Comment";
 
@@ -51,6 +52,7 @@ function PostDetails() {
     <>
       <Header />
       <Post post={post} onDelete={handleDelete} />
+      <Likes postId={postId} />
       <Comments postId={postId} />
     </>
   ) : (

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Card, Button, Row, Col } from "react-bootstrap";
 import { useUser } from "../../context/UserContext";
-import Likes from "../Like/Like";
 
 interface Post {
   id: number;
@@ -51,7 +50,6 @@ const Post: React.FC<PostProps> = ({ post, onDelete }) => {
             </Col>
           </Row>
         )}
-        <Likes postId={post.id} />
       </Card.Body>
     </Card>
   );

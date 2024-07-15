@@ -49,11 +49,11 @@ const Likes: React.FC<LikesProps> = ({ postId }) => {
   };
 
   return (
-    <div>
+    <div className="m-5">
       <Button variant={hasLiked ? "danger" : "primary"} onClick={handleLike}>
         {hasLiked ? "Unlike" : "Like"}
       </Button>
-      <p className="m-1">{likes} like(s)</p>
+      <p className="m-2">{likes} like(s)</p>
     </div>
   );
 };

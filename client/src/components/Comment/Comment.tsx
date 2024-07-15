@@ -122,7 +122,6 @@ const Comments: React.FC<CommentProps> = ({ postId }) => {
                 <Button
                   variant="danger"
                   onClick={() => handleDeleteComment(comment.id)}
-                  className="m-2"
                 >
                   Delete
                 </Button>
