@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, Button, Row, Col } from "react-bootstrap";
+import { formatDistanceToNow } from "date-fns";
 import { useUser } from "../../context/UserContext";
 
 interface Post {
@@ -19,12 +20,15 @@ interface PostProps {
 
 const Post: React.FC<PostProps> = ({ post, onDelete }) => {
   const { userId } = useUser();
+  const relativeTime = formatDistanceToNow(new Date(post.created_at), {
+    addSuffix: true,
+  });
 
   return (
     <Card className="m-5">
       <Card.Body>
         <Card.Subtitle className="mb-2 text-muted">
-          {`${post.author_name} • ${post.created_at}`}
+          {`${post.author_name} • ${relativeTime}`}
         </Card.Subtitle>
         <Card.Title>{post.title}</Card.Title>
         <Card.Text>{post.content}</Card.Text>
