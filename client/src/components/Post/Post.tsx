@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Card, Button, Row, Col } from "react-bootstrap";
+import { Card, Button, Row, Col, Image } from "react-bootstrap";
 import { formatDistanceToNow } from "date-fns";
 import { useUser } from "../../context/UserContext";
 
@@ -10,6 +10,7 @@ interface Post {
   content: string;
   author_id: number;
   author_name: string;
+  author_picture: string;
   created_at: string;
 }
 
@@ -28,6 +29,14 @@ const Post: React.FC<PostProps> = ({ post, onDelete }) => {
     <Card className="m-5">
       <Card.Body>
         <Card.Subtitle className="mb-2 text-muted">
+          <Image
+            src={post.author_picture}
+            roundedCircle
+            height="24"
+            width="24"
+            alt="User Avatar"
+            className="userImage"
+          />
           {`${post.author_name} \u2022 ${relativeTime}`}
         </Card.Subtitle>
         <Card.Title>{post.title}</Card.Title>

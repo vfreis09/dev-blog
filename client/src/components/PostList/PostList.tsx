@@ -23,7 +23,6 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
     <Container className="pt-5">
       <Row className="justify-content-center mt-4">
         <Col md={8}>
-          <h1 className="display-4 text-center">Blog Posts</h1>
           <ListGroup className="post-list">
             {posts.map((post) => (
               <ListGroup.Item key={post.id} className="mb-3 border-0 p-0">

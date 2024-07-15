@@ -6,10 +6,11 @@ const getComment = async (req: Request, res: Response) => {
   try {
     const comments = await pool.query(
       `
-      SELECT comments.id, comments.content, comments.author_id, users.name as author_name
+      SELECT comments.id, comments.content, comments.author_id, users.name as author_name, users.picture AS author_picture 
       FROM comments
       JOIN users ON comments.author_id = users.id
       WHERE comments.post_id = $1
+      ORDER BY comments.created_at DESC
     `,
       [postId]
     );

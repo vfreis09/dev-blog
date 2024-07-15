@@ -42,7 +42,7 @@ const getPostById = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   try {
     const result = await pool.query(
-      `SELECT posts.id, posts.title, posts.content, posts.author_id, posts.created_at, users.name AS author_name
+      `SELECT posts.id, posts.title, posts.content, posts.author_id, posts.created_at, users.name AS author_name, users.picture AS author_picture 
        FROM posts
        JOIN users ON posts.author_id = users.id
        WHERE posts.id = $1`,

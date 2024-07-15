@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Form } from "react-bootstrap";
+import { Button, Card, Form, Image } from "react-bootstrap";
 
 interface CommentProps {
   postId: number | undefined;
@@ -12,6 +12,7 @@ interface Comment {
   content: string;
   author_id: number;
   author_name: string;
+  author_picture: string;
 }
 
 const Comments: React.FC<CommentProps> = ({ postId }) => {
@@ -115,6 +116,14 @@ const Comments: React.FC<CommentProps> = ({ postId }) => {
           <Card key={comment.id} className="mb-3">
             <Card.Body>
               <Card.Text>
+                <Image
+                  src={comment.author_picture}
+                  roundedCircle
+                  height="24"
+                  width="24"
+                  alt="User Avatar"
+                  className="userImage"
+                />
                 <strong>{comment.author_name}</strong>
               </Card.Text>
               <Card.Text>{comment.content}</Card.Text>
