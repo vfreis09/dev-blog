@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Form, Image, Row, Col } from "react-bootstrap";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useUser } from "../../context/UserContext";
 import Likes from "../../components/Like/Like";
 
 interface CommentProps {
-  postId: number | undefined;
+  postId?: number;
 }
 
 interface Comment {
@@ -16,40 +17,37 @@ interface Comment {
   author_picture: string;
 }
 
+const fetchComments = async (postId: number) => {
+  const response = await fetch(`http://localhost:3000/api/comments/${postId}`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching comments");
+  }
+  return response.json();
+};
+
 const Comments: React.FC<CommentProps> = ({ postId }) => {
   const { userId, isLoggedIn } = useUser();
-  const [comments, setComments] = useState<Comment[]>([]);
   const [content, setContent] = useState("");
-
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const fetchComments = async () => {
-    if (!postId) return;
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/comments/${postId}`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch comments");
-      }
-      const data = await response.json();
-      setComments(data);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
+  const {
+    data: comments = [],
+    isLoading,
+    isError,
+  } = useQuery<Comment[]>(
+    ["comments", postId],
+    () => fetchComments(postId || 0),
+    {
+      enabled: !!postId,
     }
-  };
+  );
 
-  useEffect(() => {
-    fetchComments();
-  }, [postId]);
-
-  const handleComment = async () => {
-    if (!postId) return;
-    try {
+  const addCommentMutation = useMutation<void, Error, { content: string }>(
+    async ({ content }) => {
       const response = await fetch(
         `http://localhost:3000/api/comments/${postId}`,
         {
@@ -65,22 +63,32 @@ const Comments: React.FC<CommentProps> = ({ postId }) => {
         throw new Error("Failed to post comment");
       }
       setContent("");
-      fetchComments();
-    } catch (error) {
-      console.error("Error posting comment:", error);
+      queryClient.invalidateQueries(["comments", postId || 0]);
     }
+  );
+
+  const deleteCommentMutation = useMutation<void, Error, number>(
+    async (commentId) => {
+      const response = await fetch(
+        `http://localhost:3000/api/comments/${commentId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to delete comment");
+      }
+      queryClient.invalidateQueries(["comments", postId || 0]);
+    }
+  );
+
+  const handleComment = () => {
+    addCommentMutation.mutate({ content });
   };
 
-  const handleDeleteComment = async (commentId: number) => {
-    try {
-      await fetch(`http://localhost:3000/api/comments/${commentId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      setComments(comments.filter((comment) => comment.id !== commentId));
-    } catch (error) {
-      console.error("Error deleting comment:", error);
-    }
+  const handleDeleteComment = (commentId: number) => {
+    deleteCommentMutation.mutate(commentId);
   };
 
   return (
@@ -113,39 +121,45 @@ const Comments: React.FC<CommentProps> = ({ postId }) => {
         </div>
       )}
       <div className="m-5">
-        {comments.map((comment) => (
-          <Card key={comment.id} className="mb-3">
-            <Card.Body>
-              <Card.Text>
-                <Image
-                  src={comment.author_picture}
-                  roundedCircle
-                  height="24"
-                  width="24"
-                  alt="User Avatar"
-                  className="userImage"
-                />
-                <strong>{comment.author_name}</strong>
-              </Card.Text>
-              <Card.Text>{comment.content}</Card.Text>
-              <Row className="align-items-center">
-                <Col>
-                  <Likes itemId={comment.id} type="comment" />
-                </Col>
-                <Col>
-                  {comment.author_id === userId && (
-                    <Button
-                      variant="danger"
-                      onClick={() => handleDeleteComment(comment.id)}
-                    >
-                      Delete
-                    </Button>
-                  )}
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        ))}
+        {isLoading ? (
+          <div>Loading comments...</div>
+        ) : isError ? (
+          <div>Error fetching comments</div>
+        ) : (
+          comments.map((comment) => (
+            <Card key={comment.id} className="mb-3">
+              <Card.Body>
+                <Card.Text>
+                  <Image
+                    src={comment.author_picture}
+                    roundedCircle
+                    height="24"
+                    width="24"
+                    alt="User Avatar"
+                    className="userImage"
+                  />
+                  <strong>{comment.author_name}</strong>
+                </Card.Text>
+                <Card.Text>{comment.content}</Card.Text>
+                <Row className="align-items-center">
+                  <Col>
+                    <Likes itemId={comment.id} type="comment" />
+                  </Col>
+                  <Col>
+                    {comment.author_id === userId && (
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDeleteComment(comment.id)}
+                      >
+                        Delete
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   );

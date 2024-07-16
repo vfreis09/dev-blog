@@ -1,62 +1,85 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 
 interface PostFormProps {
   isEditing: boolean;
 }
 
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+}
+
+const fetchPost = async (postId: number): Promise<Post> => {
+  const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
 const PostForm: React.FC<PostFormProps> = ({ isEditing }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const queryClient = useQueryClient();
 
   const postId = parseInt(id ?? "");
 
+  const {
+    data: post,
+    error,
+    isLoading,
+  } = useQuery<Post, Error>(["post", postId], () => fetchPost(postId), {
+    enabled: isEditing && !isNaN(postId),
+  });
+
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
   useEffect(() => {
-    if (isEditing && !isNaN(postId)) {
-      const fetchPost = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:3000/api/posts/${postId}`
-          );
-          const data = await response.json();
-          setTitle(data.title);
-          setContent(data.content);
-        } catch (error) {
-          console.error("Error fetching post:", error);
-        }
-      };
-
-      fetchPost();
+    if (post) {
+      setTitle(post.title);
+      setContent(post.content);
     }
-  }, [postId, isEditing]);
+  }, [post]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const mutation = useMutation(
+    (newPost: Post) =>
+      fetch(`http://localhost:3000/api/posts/${isEditing ? `${postId}` : ""}`, {
+        method: isEditing ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(newPost),
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("posts");
+        navigate("/");
+      },
+      onError: (error) => {
+        console.error("Error submitting post:", error);
+      },
+    }
+  );
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const postData = { title, content };
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/posts/${isEditing ? `${postId}` : ""}`,
-        {
-          method: isEditing ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(postData),
-        }
-      );
-      if (response.ok) {
-        navigate("/");
-      } else {
-        console.error("Error submitting post:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error submitting post:", error);
-    }
+    mutation.mutate(postData as any);
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error fetching post: {error.message}</p>;
+  }
 
   return (
     <Container className="pt-4 mt-4">

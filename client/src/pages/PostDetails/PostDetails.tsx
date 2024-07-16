@@ -1,64 +1,78 @@
-import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import Post from "../../components/Post/Post";
 import Likes from "../../components/Like/Like";
 import Header from "../../components/Header/Header";
 import Comments from "../../components/Comment/Comment";
 
+const fetchPost = async (postId: number): Promise<Post> => {
+  const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
+const deletePost = async (postId: number): Promise<void> => {
+  const response = await fetch(`http://localhost:3000/api/posts/${postId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error deleting post");
+  }
+};
+
 function PostDetails() {
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [post, setPost] = useState<Post | null>(null);
-
+  const { id } = useParams<{ id: string }>();
   const postId = parseInt(id ?? "");
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (!isNaN(postId)) {
-      const fetchPost = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:3000/api/posts/${postId}`
-          );
-          const data = await response.json();
-          setPost(data);
-        } catch (error) {
-          console.error("Error fetching post:", error);
-        }
-      };
+  if (isNaN(postId)) {
+    console.error("Invalid postId:", postId);
+    return <p>Invalid post ID</p>;
+  }
 
-      fetchPost();
-    } else {
-      console.error("Invalid postId:", postId);
-    }
-  }, [postId]);
+  const {
+    data: post,
+    error,
+    isLoading,
+  } = useQuery<Post, Error>(["post", postId], () => fetchPost(postId));
 
-  const handleDelete = async (postId: number) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/posts/${postId}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
-      if (response.ok) {
-        navigate("/");
-      }
-    } catch (error) {
+  const mutation = useMutation(() => deletePost(postId), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("posts");
+      navigate("/");
+    },
+    onError: (error) => {
       console.error("Error deleting post:", error);
-    }
+    },
+  });
+
+  const handleDelete = () => {
+    mutation.mutate();
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error fetching post: {error.message}</p>;
+  }
+
   return post ? (
     <>
       <Header />
       <Post post={post} onDelete={handleDelete} />
       <div className="m-5">
-        <Likes postId={postId} />
+        <Likes itemId={postId} type="post" />
       </div>
       <Comments postId={postId} />
     </>
   ) : (
-    <p>Loading...</p>
+    <p>No post found</p>
   );
 }
 

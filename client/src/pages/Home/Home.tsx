@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
 import Header from "../../components/Header/Header";
 import PostList from "../../components/PostList/PostList";
 
@@ -11,27 +11,34 @@ interface Post {
   created_at: string;
 }
 
+const fetchPosts = async (): Promise<Post[]> => {
+  const response = await fetch("http://localhost:3000/api/posts/");
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
 function HomePage() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const {
+    data: posts,
+    error,
+    isLoading,
+  } = useQuery<Post[], Error>("posts", fetchPosts);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/posts/");
-        const data = await response.json();
-        setPosts(data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-    fetchPosts();
-  }, []);
+  if (error) {
+    return <div>Error fetching posts: {error.message}</div>;
+  }
+
   return (
     <>
       <Header />
       <div>
-        <PostList posts={posts} />
+        <PostList posts={posts || []} />
       </div>
     </>
   );

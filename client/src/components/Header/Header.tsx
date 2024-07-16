@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import getGoogleOauthUrl from "../../utils/getGoogleUrl";
-import { useUser } from "../../context/UserContext";
+import { useMutation, useQueryClient } from "react-query";
 import {
   Button,
   Navbar,
@@ -10,33 +9,49 @@ import {
   Image,
   Collapse,
 } from "react-bootstrap";
+import getGoogleOauthUrl from "../../utils/getGoogleUrl";
+import { useUser } from "../../context/UserContext";
 import styles from "./Header.module.css";
 
 const Header: React.FC = () => {
-  const { user, isLoggedIn, setUser, setIsLoggedIn } = useUser();
+  const { user, setIsLoggedIn, setUser } = useUser();
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/api/logout", {
+  const { mutate: logout, isLoading: logoutLoading } = useMutation(
+    () => {
+      return fetch("http://localhost:3000/api/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
+      }).then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
       });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      if (data.message === "Logged out successfully") {
-        setIsLoggedIn(false);
-        setUser(null);
-      }
-    } catch (error) {
-      console.error("Error logging out:", error);
+    },
+    {
+      onSuccess: (data) => {
+        if (data.message === "Logged out successfully") {
+          setIsLoggedIn(false);
+          setUser(null);
+          queryClient.removeQueries("userData");
+        }
+      },
+      onError: (error) => {
+        console.error("Error logging out:", error);
+      },
     }
+  );
+
+  const handleLogout = () => {
+    logout();
   };
+
+  if (logoutLoading) return <p>Loading...</p>;
 
   return (
     <>
@@ -48,17 +63,17 @@ const Header: React.FC = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              {isLoggedIn && (
+              {user && (
                 <Nav.Link as={Link} to="/create">
                   Create Post
                 </Nav.Link>
               )}
             </Nav>
             <Nav>
-              {isLoggedIn ? (
+              {user ? (
                 <>
                   <Image
-                    src={user?.picture}
+                    src={user.picture}
                     roundedCircle
                     height="40"
                     width="40"
@@ -84,18 +99,22 @@ const Header: React.FC = () => {
       <Collapse in={open}>
         <div className={styles.collapseContainer}>
           <div className="bg-light p-3 rounded">
-            <Image
-              src={user?.picture}
-              roundedCircle
-              height="40"
-              width="40"
-              alt="User Avatar"
-            />
-            <p>{user?.name}</p>
-            <p>{user?.email}</p>
-            <Button variant="danger" onClick={handleLogout}>
-              Logout
-            </Button>
+            {user && (
+              <>
+                <Image
+                  src={user.picture}
+                  roundedCircle
+                  height="40"
+                  width="40"
+                  alt="User Avatar"
+                />
+                <p>{user.name}</p>
+                <p>{user.email}</p>
+                <Button variant="danger" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </Collapse>
