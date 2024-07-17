@@ -38,7 +38,7 @@ function HomePage() {
   return (
     <>
       <Header />
-      <div>
+      <div className="min-vh-100">
         <PostList posts={posts || []} />
       </div>
       <Footer />
