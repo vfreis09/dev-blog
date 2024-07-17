@@ -49,6 +49,7 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     logout();
+    setOpen(!open);
   };
 
   if (logoutLoading) return <p>Loading...</p>;
