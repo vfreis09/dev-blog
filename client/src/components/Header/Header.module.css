@@ -13,3 +13,15 @@
 .navBrand {
   margin-left: 15px;
 }
+
+@media only screen and (max-width: 991px) {
+  .collapseContainer {
+    right: auto;
+    left: 10px;
+    top: 136px;
+  }
+
+  .navBrand {
+    margin-left: 0px;
+  }
+}
