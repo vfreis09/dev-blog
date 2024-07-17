@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Form, Image, Row, Col } from "react-bootstrap";
 import { useQuery, useMutation, useQueryClient } from "react-query";
+import { formatDistanceToNow } from "date-fns";
 import { useUser } from "../../context/UserContext";
 import Likes from "../../components/Like/Like";
 
@@ -15,6 +16,7 @@ interface Comment {
   author_id: number;
   author_name: string;
   author_picture: string;
+  created_at: string;
 }
 
 const fetchComments = async (postId: number) => {
@@ -138,7 +140,12 @@ const Comments: React.FC<CommentProps> = ({ postId }) => {
                     alt="User Avatar"
                     className="userImage"
                   />
-                  <strong>{comment.author_name}</strong>
+                  {`${comment.author_name} \u2022 ${formatDistanceToNow(
+                    new Date(comment.created_at),
+                    {
+                      addSuffix: true,
+                    }
+                  )}`}
                 </Card.Text>
                 <Card.Text>{comment.content}</Card.Text>
                 <Row className="align-items-center">
