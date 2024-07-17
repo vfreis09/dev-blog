@@ -4,6 +4,7 @@ import Post from "../../components/Post/Post";
 import Likes from "../../components/Like/Like";
 import Header from "../../components/Header/Header";
 import Comments from "../../components/Comment/Comment";
+import Footer from "../../components/Footer/Footer";
 
 const fetchPost = async (postId: number): Promise<Post> => {
   const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
@@ -65,11 +66,14 @@ function PostDetails() {
   return post ? (
     <>
       <Header />
-      <Post post={post} onDelete={handleDelete} />
-      <div className="m-5">
-        <Likes itemId={postId} type="post" />
+      <div className="min-vh-100">
+        <Post post={post} onDelete={handleDelete} />
+        <div className="m-5">
+          <Likes itemId={postId} type="post" />
+        </div>
+        <Comments postId={postId} />
       </div>
-      <Comments postId={postId} />
+      <Footer />
     </>
   ) : (
     <p>No post found</p>

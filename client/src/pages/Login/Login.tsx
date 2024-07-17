@@ -2,6 +2,7 @@ import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import getGoogleOauthUrl from "../../utils/getGoogleUrl";
+import Footer from "../../components/Footer/Footer";
 
 function LoginPage() {
   return (
@@ -30,6 +31,7 @@ function LoginPage() {
           </Col>
         </Row>
       </Container>
+      <Footer />
     </>
   );
 }

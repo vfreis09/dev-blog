@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import Header from "../../components/Header/Header";
 import PostList from "../../components/PostList/PostList";
+import Footer from "../../components/Footer/Footer";
 
 interface Post {
   id: number;
@@ -40,6 +41,7 @@ function HomePage() {
       <div>
         <PostList posts={posts || []} />
       </div>
+      <Footer />
     </>
   );
 }

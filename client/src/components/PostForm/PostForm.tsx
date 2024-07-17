@@ -82,7 +82,7 @@ const PostForm: React.FC<PostFormProps> = ({ isEditing }) => {
   }
 
   return (
-    <Container className="pt-4 mt-4">
+    <Container className="min-vh-100 pt-4 mt-4 post-form-container">
       <Row className="justify-content-md-center mt-5">
         <Col md={8} lg={6}>
           <h2 className="text-center mb-4">
