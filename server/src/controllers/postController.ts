@@ -20,18 +20,29 @@ const createPost = async (req: Request, res: Response) => {
 };
 
 const getPosts = async (req: Request, res: Response) => {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 10;
+  const offset = (page - 1) * limit;
+
   try {
     const result = await pool.query(
-      `SELECT posts.id AS 
-        id, posts.title, posts.content, 
-        posts.created_at AS created_at, 
-        users.name AS author_name, 
-        users.picture AS author_picture 
-        FROM posts JOIN users ON posts.author_id = users.id 
-        ORDER BY posts.created_at DESC
-    `
+      `SELECT posts.id AS id, posts.title, posts.content, posts.created_at AS created_at, 
+      users.name AS author_name, users.picture AS author_picture 
+       FROM posts 
+       JOIN users ON posts.author_id = users.id 
+       ORDER BY posts.created_at DESC 
+       LIMIT $1 OFFSET $2`,
+      [limit, offset]
     );
-    res.json(result.rows);
+    const totalResult = await pool.query("SELECT COUNT(*) FROM posts");
+    const totalPosts = parseInt(totalResult.rows[0].count, 10);
+
+    res.json({
+      posts: result.rows,
+      totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
+      currentPage: page,
+    });
   } catch (error) {
     console.error("Error fetching posts:", error);
     res.status(500).json({ message: "Internal Server Error" });

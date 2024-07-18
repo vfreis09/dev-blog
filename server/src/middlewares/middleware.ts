@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-const pool = require("../config/dbConfig");
 import dotenv from "dotenv";
+const pool = require("../config/dbConfig");
 
 dotenv.config();
 

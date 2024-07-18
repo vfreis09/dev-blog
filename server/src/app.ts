@@ -1,10 +1,10 @@
 import express from "express";
 import session from "express-session";
 import cors from "cors";
+import dotenv from "dotenv";
 import initDb from "./models/db";
 import userRoutes from "./routes/userRoutes";
 import postRoutes from "./routes/postRoutes";
-import dotenv from "dotenv";
 
 dotenv.config();
 
